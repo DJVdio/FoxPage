@@ -7,7 +7,7 @@ import BootScreen from "./boot-screen";
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const barRef = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     const bar = barRef.current;
