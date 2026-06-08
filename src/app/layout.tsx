@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
-import { Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import PipBoyFrame from "./pipboy-frame";
 import "./globals.css";
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "FOXPAGE · Pip-Boy 3000",
@@ -19,10 +14,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-dvh flex flex-col">
+    <html lang="en" className="h-full antialiased">
+      <body className="min-h-dvh font-mono">
         <div className="pip-scanline" />
-        <div className="flex flex-1 flex-col pip-boy-frame">{children}</div>
+        <PipBoyFrame>
+          <div className="flex min-h-[400px] flex-col">{children}</div>
+        </PipBoyFrame>
         <Analytics />
       </body>
     </html>
