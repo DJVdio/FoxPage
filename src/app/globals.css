@@ -59,6 +59,16 @@ body::after {
   z-index: 9998;
 }
 
+@keyframes route-progress {
+  0% { width: 0; }
+  70% { width: 85%; }
+  100% { width: 90%; }
+}
+
+.route-active {
+  animation: route-progress 200ms ease-out forwards;
+}
+
 @keyframes flicker {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.998; }
