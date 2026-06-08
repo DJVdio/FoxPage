@@ -1,19 +1,141 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f5f4;
-  --foreground: #1c1917;
+  --pip-boy-bg: #0a0f0a;
+  --pip-boy-green: #00ff41;
+  --pip-boy-green-dim: #00aa2a;
+  --pip-boy-green-dark: #003a0f;
+  --pip-boy-amber: #ffb000;
+  --pip-boy-screen: #0d1a0d;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-pip-bg: var(--pip-boy-bg);
+  --color-pip-green: var(--pip-boy-green);
+  --color-pip-green-dim: var(--pip-boy-green-dim);
+  --color-pip-green-dark: var(--pip-boy-green-dark);
+  --color-pip-amber: var(--pip-boy-amber);
+  --color-pip-screen: var(--pip-boy-screen);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--pip-boy-green-dim) transparent;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  background: var(--pip-boy-bg);
+  color: var(--pip-boy-green);
+  font-family: var(--font-geist-mono), monospace;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 65, 0.03) 2px,
+    rgba(0, 255, 65, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 65%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.998; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes scan {
+  0% { top: -10%; }
+  100% { top: 110%; }
+}
+
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 4px var(--pip-boy-green), 0 0 8px var(--pip-boy-green-dark); }
+  50% { box-shadow: 0 0 8px var(--pip-boy-green), 0 0 16px var(--pip-boy-green-dim); }
+}
+
+@keyframes boot-up {
+  0% { opacity: 0; transform: scaleY(0); }
+  50% { opacity: 0.5; transform: scaleY(0.5); filter: blur(4px); }
+  100% { opacity: 1; transform: scaleY(1); filter: blur(0); }
+}
+
+.pip-boy-frame {
+  animation: boot-up 0.8s ease-out;
+}
+
+.pip-scanline {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 255, 65, 0.08), transparent);
+  z-index: 9997;
+  animation: scan 6s linear infinite;
+  pointer-events: none;
+}
+
+.pip-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.pip-border {
+  border-color: var(--pip-boy-green-dim);
+  box-shadow: 0 0 4px var(--pip-boy-green-dark), inset 0 0 4px var(--pip-boy-green-dark);
+}
+
+.pip-border:hover {
+  border-color: var(--pip-boy-green);
+  box-shadow: 0 0 8px var(--pip-boy-green-dark), inset 0 0 8px var(--pip-boy-green-dark), 0 0 12px rgba(0, 255, 65, 0.05);
+}
+
+.pip-card {
+  background: linear-gradient(135deg, rgba(0, 255, 65, 0.03), rgba(0, 255, 65, 0.01));
+  border: 1px solid var(--pip-boy-green-dark);
+}
+
+.pip-card:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 65, 0.06), rgba(0, 255, 65, 0.02));
+}
+
+.pip-progress {
+  background: var(--pip-boy-green-dark);
+  height: 8px;
+  border: 1px solid var(--pip-boy-green-dim);
+}
+
+.pip-progress-fill {
+  background: var(--pip-boy-green);
+  height: 100%;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 6px var(--pip-boy-green-dim);
+}
+
+.pip-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--pip-boy-green-dark), var(--pip-boy-green-dim), var(--pip-boy-green-dark), transparent);
 }

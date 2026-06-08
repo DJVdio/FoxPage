@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -13,8 +9,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "App Market",
-  description: "A collection of web apps",
+  title: "FOXPAGE · Pip-Boy 3000",
+  description: "Vault-Tec™ App Market — browse and launch web apps",
 };
 
 export default function RootLayout({
@@ -23,8 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={`${geistMono.variable} h-full antialiased`}>
+      <body className="min-h-dvh flex flex-col">
+        <div className="pip-scanline" />
+        <div className="flex flex-1 flex-col pip-boy-frame">{children}</div>
+        <Analytics />
+      </body>
     </html>
   );
 }
