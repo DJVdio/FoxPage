@@ -239,6 +239,7 @@ export default function FlappyBirdPage() {
           <nav className="mb-6 flex items-center justify-between">
             <Link
               href="/apps/games"
+              prefetch={true}
               className="inline-flex items-center gap-1 text-xs tracking-[0.1em] text-[#00aa2a] transition-colors hover:text-[#00ff41]"
             >
               <span aria-hidden="true">&lt;</span>

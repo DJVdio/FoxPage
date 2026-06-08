@@ -27,6 +27,7 @@ export default function GamesPage() {
           <nav className="mb-6">
             <Link
               href="/"
+              prefetch={true}
               className="inline-flex items-center gap-1 text-xs tracking-[0.1em] text-[#00aa2a] transition-colors hover:text-[#00ff41]"
             >
               <span aria-hidden="true">&lt;</span>
@@ -45,6 +46,7 @@ export default function GamesPage() {
               <Link
                 key={game.id}
                 href={game.path}
+                prefetch={true}
                 className="pip-card pip-border group flex items-center gap-4 rounded px-4 py-3 transition-all duration-200"
               >
                 <span className="w-6 text-center text-xs font-bold text-[#00aa2a]">
