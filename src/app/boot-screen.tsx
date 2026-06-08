@@ -22,6 +22,7 @@ export default function BootScreen({ onFinish }: { onFinish: () => void }) {
   const finish = useCallback(() => {
     if (finished.current) return;
     finished.current = true;
+    localStorage.setItem("foxpage_booted", "1");
     setFadeOut(true);
     setTimeout(onFinish, 400);
   }, [onFinish]);

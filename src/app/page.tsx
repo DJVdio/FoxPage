@@ -6,7 +6,11 @@ import { apps } from "@/data/apps";
 import BootScreen from "./boot-screen";
 
 export default function Home() {
-  const [booted, setBooted] = useState(false);
+  const [booted, setBooted] = useState(() => {
+    if (typeof window !== "undefined" && localStorage.getItem("foxpage_booted")) return true;
+    return false;
+  });
+
 
   return (
     <>
