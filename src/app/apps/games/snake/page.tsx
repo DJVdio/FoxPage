@@ -22,26 +22,28 @@ function randomFood(snake: Pos[]): Pos {
 
 export default function SnakePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const initFood = randomFood(initialSnake);
   const [snake, setSnake] = useState<Pos[]>(initialSnake);
-  const [food, setFood] = useState<Pos>(randomFood(initialSnake));
+  const [food, setFood] = useState<Pos>(initFood);
   const [dir, setDir] = useState<Dir>("RIGHT");
   const [nextDir, setNextDir] = useState<Dir>("RIGHT");
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [started, setStarted] = useState(false);
-  const gameRef = useRef({ snake: initialSnake, food: randomFood(initialSnake), dir: "RIGHT" as Dir, gameOver: false });
+  const gameRef = useRef({ snake: initialSnake, food: initFood, dir: "RIGHT" as Dir, gameOver: false });
 
   const reset = useCallback(() => {
     const s = initialSnake;
+    const f = randomFood(s);
     setSnake(s);
-    setFood(randomFood(s));
+    setFood(f);
     setDir("RIGHT");
     setNextDir("RIGHT");
     setScore(0);
     setGameOver(false);
     setStarted(false);
-    gameRef.current = { snake: s, food: randomFood(s), dir: "RIGHT", gameOver: false };
+    gameRef.current = { snake: s, food: f, dir: "RIGHT", gameOver: false };
   }, []);
 
   useEffect(() => {
