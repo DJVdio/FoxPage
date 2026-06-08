@@ -29,4 +29,11 @@ export const apps: AppInfo[] = [
     icon: "🎮",
     path: "/apps/games",
   },
+  {
+    id: "timer",
+    name: "计时器",
+    description: "正向计时 · 倒计时 · 番茄钟",
+    icon: "⏱",
+    path: "/apps/timer",
+  },
 ]

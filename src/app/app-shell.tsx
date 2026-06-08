@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BootScreen from "./boot-screen";
 
-const allPaths = ["/apps/hello-world", "/apps/games", "/apps/games/snake", "/apps/games/flappybird"];
+const allPaths = ["/apps/hello-world", "/apps/games", "/apps/games/snake", "/apps/games/flappybird", "/apps/timer"];
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
