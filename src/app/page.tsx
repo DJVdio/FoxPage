@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { apps } from "@/data/apps";
+import BootScreen from "./boot-screen";
 
 export default function Home() {
   return (
     <>
+      <BootScreen />
       <header className="border-b border-[#003a0f] px-4 py-3">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
           <div className="flex items-center gap-3">
@@ -35,12 +37,14 @@ export default function Home() {
               const Tag = isExternal ? "a" : Link
               const href = app.externalUrl || app.path!
               const externalProps = isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {}
+              const internalProps = isExternal ? {} : { prefetch: true as const }
 
               return (
                 <Tag
                   key={app.id}
                   href={href}
                   {...externalProps}
+                  {...internalProps}
                   className="pip-card pip-border group flex items-center gap-4 rounded px-4 py-3 transition-all duration-200"
                 >
                   <span className="w-6 text-center text-xs font-bold text-[#00aa2a]">
