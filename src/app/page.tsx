@@ -5,7 +5,7 @@ import BootScreen from "./boot-screen";
 export default function Home() {
   return (
     <>
-      <BootScreen />
+      <BootScreen prefetchPaths={["/apps/hello-world", "/apps/games", "/apps/games/snake", "/apps/games/flappybird"]} />
       <header className="border-b border-[#003a0f] px-4 py-3">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
           <div className="flex items-center gap-3">

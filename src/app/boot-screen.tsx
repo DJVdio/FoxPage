@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const bootLines = [
   "VAULT-TEC INDUSTRIES",
@@ -12,7 +13,8 @@ const bootLines = [
   "SYSTEM READY.",
 ];
 
-export default function BootScreen() {
+export default function BootScreen({ prefetchPaths = [] }: { prefetchPaths?: string[] }) {
+  const router = useRouter();
   const [live, setLive] = useState(true);
   const [visibleLines, setVisibleLines] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -32,6 +34,10 @@ export default function BootScreen() {
       finished.current = true;
       setLive(false);
       return;
+    }
+
+    for (const p of prefetchPaths) {
+      router.prefetch(p);
     }
 
     const lineTimer = setInterval(() => {
