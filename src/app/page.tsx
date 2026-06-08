@@ -30,34 +30,42 @@ export default function Home() {
           </div>
 
           <div className="space-y-3">
-            {apps.map((app, i) => (
-              <Link
-                key={app.id}
-                href={app.path}
-                className="pip-card pip-border group flex items-center gap-4 rounded px-4 py-3 transition-all duration-200"
-              >
-                <span className="w-6 text-center text-xs font-bold text-[#00aa2a]">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="pip-border flex h-10 w-10 items-center justify-center rounded text-lg">
-                  {app.icon}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h2 className="truncate text-sm font-semibold tracking-[0.05em] text-[#00ff41] group-hover:text-[#00ff41]">
-                      {app.name}
-                    </h2>
-                    <span className="shrink-0 rounded border border-[#00aa2a]/30 px-1.5 py-0.5 text-[10px] tracking-[0.1em] text-[#00aa2a]">
-                      READY
-                    </span>
+            {apps.map((app, i) => {
+              const isExternal = !!app.externalUrl
+              const Tag = isExternal ? "a" : Link
+              const href = app.externalUrl || app.path!
+              const externalProps = isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {}
+
+              return (
+                <Tag
+                  key={app.id}
+                  href={href}
+                  {...externalProps}
+                  className="pip-card pip-border group flex items-center gap-4 rounded px-4 py-3 transition-all duration-200"
+                >
+                  <span className="w-6 text-center text-xs font-bold text-[#00aa2a]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="pip-border flex h-10 w-10 items-center justify-center rounded text-lg">
+                    {app.icon}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h2 className="truncate text-sm font-semibold tracking-[0.05em] text-[#00ff41] group-hover:text-[#00ff41]">
+                        {app.name}
+                      </h2>
+                      <span className="shrink-0 rounded border border-[#00aa2a]/30 px-1.5 py-0.5 text-[10px] tracking-[0.1em] text-[#00aa2a]">
+                        {isExternal ? "EXTERNAL" : "READY"}
+                      </span>
+                    </div>
+                    <p className="mt-0.5 truncate text-xs text-[#00aa2a]/70">
+                      {app.description}
+                    </p>
                   </div>
-                  <p className="mt-0.5 truncate text-xs text-[#00aa2a]/70">
-                    {app.description}
-                  </p>
-                </div>
-                <span className="text-[#00aa2a]/40 group-hover:text-[#00ff41]">&gt;</span>
-              </Link>
-            ))}
+                  <span className="text-[#00aa2a]/40 group-hover:text-[#00ff41]">&gt;</span>
+                </Tag>
+              )
+            })}
           </div>
         </div>
 
