@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import AppShell from "./app-shell";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -25,7 +26,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-dvh flex flex-col font-mono">
         <div className="pip-scanline" />
-        <div className="flex flex-1 flex-col">{children}</div>
+        <div className="flex flex-1 flex-col">
+          <AppShell>{children}</AppShell>
+        </div>
         <Analytics />
         <SpeedInsights />
       </body>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const bootLines = [
   "VAULT-TEC INDUSTRIES",
@@ -22,21 +23,24 @@ function domPrefetch(paths: string[]) {
 }
 
 export default function BootScreen({ prefetchPaths = [] }: { prefetchPaths?: string[] }) {
-  const [hidden, setHidden] = useState(false);
+  const pathname = usePathname();
+  const [hidden, setHidden] = useState(true);
   const [lines, setLines] = useState(0);
   const [progress, setProgress] = useState(0);
   const [fading, setFading] = useState(false);
   const mounted = useRef(false);
-  const animDone = useRef(false);
+  const played = useRef(false);
 
   useEffect(() => {
     mounted.current = true;
 
-    if (sessionStorage.getItem("foxpage_booted")) {
+    if (pathname !== "/" || played.current || sessionStorage.getItem("foxpage_booted")) {
       setHidden(true);
       return;
     }
 
+    played.current = true;
+    setHidden(false);
     domPrefetch(prefetchPaths);
 
     let lc = 0;
@@ -55,7 +59,6 @@ export default function BootScreen({ prefetchPaths = [] }: { prefetchPaths?: str
 
     const doneTimer = setTimeout(() => {
       if (!mounted.current) return;
-      animDone.current = true;
       sessionStorage.setItem("foxpage_booted", "1");
       setFading(true);
       setTimeout(() => {
@@ -65,12 +68,11 @@ export default function BootScreen({ prefetchPaths = [] }: { prefetchPaths?: str
     }, 3200);
 
     return () => {
-      mounted.current = false;
       clearInterval(lTimer);
       clearInterval(pTimer);
       clearTimeout(doneTimer);
     };
-  }, []);
+  }, [pathname]);
 
   if (hidden) return null;
 
