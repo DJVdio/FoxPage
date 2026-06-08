@@ -23,6 +23,10 @@
   scrollbar-color: var(--pip-boy-green-dim) transparent;
 }
 
+html.foxpage-booted .boot-screen-wrapper {
+  display: none !important;
+}
+
 body {
   background: #0a0f0a;
   color: var(--pip-boy-green);

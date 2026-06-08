@@ -15,6 +15,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(localStorage.getItem('foxpage_booted')){document.documentElement.classList.add('foxpage-booted')}}catch(e){}",
+          }}
+        />
+      </head>
       <body className="min-h-dvh flex flex-col font-mono">
         <div className="pip-scanline" />
         <div className="flex flex-1 flex-col">{children}</div>
