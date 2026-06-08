@@ -185,7 +185,10 @@ export default function FlappyBirdPage() {
       setStarted(true);
     }
     birdV.current = FLAP_VEL;
-  }, []);
+    if (!frameId.current) {
+      frameId.current = requestAnimationFrame(gameLoop);
+    }
+  }, [gameLoop]);
 
   useEffect(() => {
     resetGame();
