@@ -22,4 +22,11 @@ export const apps: AppInfo[] = [
     icon: "🍳",
     externalUrl: "https://howtocook.aiursoft.com/",
   },
+  {
+    id: "games",
+    name: "小游戏",
+    description: "内置迷你游戏合集",
+    icon: "🎮",
+    path: "/apps/games",
+  },
 ]
