@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const bootLines = [
   "VAULT-TEC INDUSTRIES",
@@ -13,19 +13,8 @@ const bootLines = [
   "SYSTEM READY.",
 ];
 
-function domPrefetch(paths: string[]) {
-  for (const p of paths) {
-    const link = document.createElement("link");
-    link.rel = "prefetch";
-    link.href = p;
-    document.head.appendChild(link);
-    console.log(`[Boot] <link rel=prefetch> ${p}`);
-  }
-}
-
-export default function BootScreen({ prefetchPaths = [] }: { prefetchPaths?: string[] }) {
+export default function BootScreen() {
   const pathname = usePathname();
-  const router = useRouter();
   const [hidden, setHidden] = useState(false);
   const [lines, setLines] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -37,7 +26,6 @@ export default function BootScreen({ prefetchPaths = [] }: { prefetchPaths?: str
     mounted.current = true;
 
     if (pathname !== "/" || played.current || sessionStorage.getItem("foxpage_booted")) {
-      console.log(`[Boot] skip: path=${pathname} played=${played.current} stored=${!!sessionStorage.getItem("foxpage_booted")}`);
       setHidden(true);
       return;
     }
@@ -45,57 +33,32 @@ export default function BootScreen({ prefetchPaths = [] }: { prefetchPaths?: str
     console.log("[Boot] === BOOT START ===");
     played.current = true;
     setHidden(false);
-    console.log(`[Boot] DOM prefetch: ${prefetchPaths.join(", ")}`);
-    domPrefetch(prefetchPaths);
-
-    console.log("[Boot] router.prefetch start");
-    for (const p of prefetchPaths) {
-      try {
-        router.prefetch(p);
-        console.log(`[Boot] router.prefetch(${p}) OK`);
-      } catch (e) {
-        console.log(`[Boot] router.prefetch(${p}) FAIL:`, e);
-      }
-    }
-    console.log("[Boot] router.prefetch done");
 
     let lc = 0;
     const lTimer = setInterval(() => {
       lc++;
       setLines(lc);
-      console.log(`[Boot] line ${lc}/${bootLines.length}`);
-      if (lc >= bootLines.length) {
-        clearInterval(lTimer);
-        console.log("[Boot] all lines done");
-      }
+      if (lc >= bootLines.length) clearInterval(lTimer);
     }, 280);
 
     let steps = 0;
     const pTimer = setInterval(() => {
       steps++;
-      const pct = Math.min(100, (steps / 90) * 100);
-      setProgress(pct);
-      if (steps % 15 === 0) console.log(`[Boot] progress ${Math.floor(pct)}%`);
-      if (steps >= 90) {
-        clearInterval(pTimer);
-        console.log("[Boot] progress 100%");
-      }
+      setProgress(Math.min(100, (steps / 90) * 100));
+      if (steps >= 90) clearInterval(pTimer);
     }, 30);
 
     const doneTimer = setTimeout(() => {
       if (!mounted.current) return;
-      console.log("[Boot] === BOOT FINISH ===");
       sessionStorage.setItem("foxpage_booted", "1");
       setFading(true);
       setTimeout(() => {
         if (!mounted.current) return;
-        console.log("[Boot] hidden → true");
         setHidden(true);
       }, 400);
     }, 3200);
 
     return () => {
-      console.log("[Boot] cleanup (navigation away during boot?)");
       clearInterval(lTimer);
       clearInterval(pTimer);
       clearTimeout(doneTimer);
