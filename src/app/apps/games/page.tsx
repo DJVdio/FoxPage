@@ -8,6 +8,13 @@ const miniGames = [
     icon: "🐍",
     path: "/apps/games/snake",
   },
+  {
+    id: "flappybird",
+    name: "Flappy Bird",
+    description: "按空格/点击飞行 · 经典 flappy bird",
+    icon: "🐦",
+    path: "/apps/games/flappybird",
+  },
 ]
 
 export default function GamesPage() {
