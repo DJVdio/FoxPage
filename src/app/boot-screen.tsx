@@ -32,7 +32,7 @@ export default function BootScreen({ prefetchPaths = [] }: { prefetchPaths?: str
   useEffect(() => {
     mounted.current = true;
 
-    if (localStorage.getItem("foxpage_booted")) {
+    if (sessionStorage.getItem("foxpage_booted")) {
       setHidden(true);
       return;
     }
@@ -56,7 +56,7 @@ export default function BootScreen({ prefetchPaths = [] }: { prefetchPaths?: str
     const doneTimer = setTimeout(() => {
       if (!mounted.current) return;
       animDone.current = true;
-      localStorage.setItem("foxpage_booted", "1");
+      sessionStorage.setItem("foxpage_booted", "1");
       setFading(true);
       setTimeout(() => {
         if (!mounted.current) return;

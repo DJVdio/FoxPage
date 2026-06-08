@@ -19,7 +19,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{if(localStorage.getItem('foxpage_booted')){document.documentElement.classList.add('foxpage-booted')}}catch(e){}",
+              "try{if(sessionStorage.getItem('foxpage_booted')){document.documentElement.classList.add('foxpage-booted')}}catch(e){}",
           }}
         />
       </head>
