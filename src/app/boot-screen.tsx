@@ -20,6 +20,7 @@ export default function BootScreen({ prefetchPaths = [] }: { prefetchPaths?: str
   const [progress, setProgress] = useState(0);
   const [fadeOut, setFadeOut] = useState(false);
   const finished = useRef(false);
+  const started = useRef(false);
 
   const finish = useCallback(() => {
     if (finished.current) return;
@@ -36,45 +37,49 @@ export default function BootScreen({ prefetchPaths = [] }: { prefetchPaths?: str
       return;
     }
 
-    for (const p of prefetchPaths) {
-      router.prefetch(p);
-    }
+    started.current = true;
 
+    let lineCount = 0;
     const lineTimer = setInterval(() => {
-      setVisibleLines((v) => {
-        if (v >= bootLines.length) {
-          clearInterval(lineTimer);
-          return v;
-        }
-        return v + 1;
-      });
+      lineCount++;
+      setVisibleLines(lineCount);
+      if (lineCount >= bootLines.length) {
+        clearInterval(lineTimer);
+      }
     }, 280);
 
-    const duration = 2700;
-    const interval = 30;
-    const step = 100 / (duration / interval);
-    const prog = setInterval(() => {
-      setProgress((p) => {
-        const next = p + step;
-        if (next >= 100) {
-          clearInterval(prog);
-          return 100;
-        }
-        return next;
-      });
-    }, interval);
+    const totalSteps = 90;
+    let step = 0;
+    const progTimer = setInterval(() => {
+      step++;
+      setProgress(Math.min(100, (step / totalSteps) * 100));
+      if (step >= totalSteps) {
+        clearInterval(progTimer);
+      }
+    }, 30);
 
     return () => {
       clearInterval(lineTimer);
-      clearInterval(prog);
+      clearInterval(progTimer);
     };
   }, []);
 
   useEffect(() => {
-    if (visibleLines >= bootLines.length && progress >= 100 && !finished.current) {
-      setTimeout(finish, 500);
+    if (started.current && visibleLines >= bootLines.length && progress >= 100 && !finished.current) {
+      const t = setTimeout(finish, 500);
+      return () => clearTimeout(t);
     }
   }, [visibleLines, progress, finish]);
+
+  useEffect(() => {
+    if (!started.current) return;
+    const t = setTimeout(() => {
+      for (const p of prefetchPaths) {
+        try { router.prefetch(p); } catch {}
+      }
+    }, 100);
+    return () => clearTimeout(t);
+  }, []);
 
   if (!live) return null;
 

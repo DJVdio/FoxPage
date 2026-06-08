@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import PipHeader from "@/app/pip-header";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const W = 360;
@@ -231,52 +232,55 @@ export default function FlappyBirdPage() {
   }, [started, gameOver, draw]);
 
   return (
-    <div className="flex flex-1 flex-col px-4 py-6">
-      <div className="mx-auto w-full max-w-lg flex-1">
-        <nav className="mb-6 flex items-center justify-between">
-          <Link
-            href="/apps/games"
-            className="inline-flex items-center gap-1 text-xs tracking-[0.1em] text-[#00aa2a] transition-colors hover:text-[#00ff41]"
-          >
-            <span aria-hidden="true">&lt;</span>
-            <span>BACK</span>
-          </Link>
-          <div className="flex items-center gap-4 text-xs tracking-[0.1em] text-[#00aa2a]">
-            <span>SCORE: <span className="text-[#00ff41]">{String(score).padStart(3, "0")}</span></span>
-            <span>BEST: <span className="text-[#ffb000]">{String(highScore).padStart(3, "0")}</span></span>
-          </div>
-        </nav>
+    <>
+      <PipHeader />
+      <div className="flex flex-1 flex-col px-4 py-6">
+        <div className="mx-auto w-full max-w-lg flex-1">
+          <nav className="mb-6 flex items-center justify-between">
+            <Link
+              href="/apps/games"
+              className="inline-flex items-center gap-1 text-xs tracking-[0.1em] text-[#00aa2a] transition-colors hover:text-[#00ff41]"
+            >
+              <span aria-hidden="true">&lt;</span>
+              <span>BACK</span>
+            </Link>
+            <div className="flex items-center gap-4 text-xs tracking-[0.1em] text-[#00aa2a]">
+              <span>SCORE: <span className="text-[#00ff41]">{String(score).padStart(3, "0")}</span></span>
+              <span>BEST: <span className="text-[#ffb000]">{String(highScore).padStart(3, "0")}</span></span>
+            </div>
+          </nav>
 
-        <div className="pip-border flex justify-center rounded p-4">
-          <canvas ref={canvasRef} width={W} height={H} className="block cursor-pointer" />
+          <div className="pip-border flex justify-center rounded p-4">
+            <canvas ref={canvasRef} width={W} height={H} className="block cursor-pointer" />
+          </div>
+
+          {!started && !gameOver && (
+            <div className="mt-4 text-center">
+              <p className="text-xs tracking-[0.15em] text-[#00aa2a]/80">
+                PRESS <span className="text-[#00ff41]">SPACE</span> OR <span className="text-[#00ff41]">CLICK</span> TO FLY
+              </p>
+              <p className="mt-1 text-[10px] tracking-[0.1em] text-[#00aa2a]/40">
+                FIRST FLAP STARTS THE GAME
+              </p>
+            </div>
+          )}
+
+          {gameOver && (
+            <div className="mt-4 text-center space-y-1">
+              <p className="text-xs tracking-[0.15em] text-[#ffb000]">GAME OVER</p>
+              <p className="text-[10px] tracking-[0.1em] text-[#00aa2a]/60">
+                PRESS <span className="text-[#00ff41]">ENTER</span> OR <span className="text-[#00ff41]">CLICK</span> TO RESTART
+              </p>
+            </div>
+          )}
         </div>
 
-        {!started && !gameOver && (
-          <div className="mt-4 text-center">
-            <p className="text-xs tracking-[0.15em] text-[#00aa2a]/80">
-              PRESS <span className="text-[#00ff41]">SPACE</span> OR <span className="text-[#00ff41]">CLICK</span> TO FLY
-            </p>
-            <p className="mt-1 text-[10px] tracking-[0.1em] text-[#00aa2a]/40">
-              FIRST FLAP STARTS THE GAME
-            </p>
-          </div>
-        )}
-
-        {gameOver && (
-          <div className="mt-4 text-center space-y-1">
-            <p className="text-xs tracking-[0.15em] text-[#ffb000]">GAME OVER</p>
-            <p className="text-[10px] tracking-[0.1em] text-[#00aa2a]/60">
-              PRESS <span className="text-[#00ff41]">ENTER</span> OR <span className="text-[#00ff41]">CLICK</span> TO RESTART
-            </p>
-          </div>
-        )}
+        <footer className="mt-6 border-t border-[#003a0f] pt-3 text-center">
+          <p className="text-[10px] tracking-[0.15em] text-[#00aa2a]/40">
+            VAULT-TEC™ RECREATIONAL SOFTWARE · FLAPPYBIRD.EXE
+          </p>
+        </footer>
       </div>
-
-      <footer className="mt-6 border-t border-[#003a0f] pt-3 text-center">
-        <p className="text-[10px] tracking-[0.15em] text-[#00aa2a]/40">
-          VAULT-TEC™ RECREATIONAL SOFTWARE · FLAPPYBIRD.EXE
-        </p>
-      </footer>
-    </div>
+    </>
   );
 }
