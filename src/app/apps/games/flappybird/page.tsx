@@ -236,7 +236,7 @@ export default function FlappyBirdPage() {
       <PipHeader />
       <div className="flex flex-1 flex-col px-4 py-6">
         <div className="mx-auto w-full max-w-lg flex-1">
-          <nav className="mb-6 flex items-center justify-between">
+          <nav className="mb-6">
             <Link
               href="/apps/games"
               prefetch={true}
@@ -245,14 +245,15 @@ export default function FlappyBirdPage() {
               <span aria-hidden="true">&lt;</span>
               <span>BACK</span>
             </Link>
-            <div className="flex items-center gap-4 text-xs tracking-[0.1em] text-[#00aa2a]">
-              <span>SCORE: <span className="text-[#00ff41]">{String(score).padStart(3, "0")}</span></span>
-              <span>BEST: <span className="text-[#ffb000]">{String(highScore).padStart(3, "0")}</span></span>
-            </div>
           </nav>
 
           <div className="pip-border flex justify-center rounded p-4">
             <canvas ref={canvasRef} width={W} height={H} className="block cursor-pointer" />
+          </div>
+
+          <div className="mt-2 flex items-center justify-center gap-4 text-xs tracking-[0.1em] text-[#00aa2a]">
+            <span>SCORE: <span className="text-[#00ff41]">{String(score).padStart(3, "0")}</span></span>
+            <span>BEST: <span className="text-[#ffb000]">{String(highScore).padStart(3, "0")}</span></span>
           </div>
 
           {!started && !gameOver && (

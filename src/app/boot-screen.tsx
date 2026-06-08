@@ -26,7 +26,7 @@ function domPrefetch(paths: string[]) {
 export default function BootScreen({ prefetchPaths = [] }: { prefetchPaths?: string[] }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [hidden, setHidden] = useState(true);
+  const [hidden, setHidden] = useState(false);
   const [lines, setLines] = useState(0);
   const [progress, setProgress] = useState(0);
   const [fading, setFading] = useState(false);
