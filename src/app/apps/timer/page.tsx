@@ -30,7 +30,6 @@ export default function TimerPage() {
   const [pomoCount, setPomoCount] = useState(0);
 
   const totalSec = useRef(0);
-  const targetSec = useRef(0);
   const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const stopTimer = useCallback(() => {

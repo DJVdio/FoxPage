@@ -1,15 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-const SETS = {
-  lower: "abcdefghijklmnopqrstuvwxyz",
-  upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-  digits: "0123456789",
-  symbols: "!@#$%^&*()-_=+[]{};:,.<>?/",
-};
-
-type SetKey = keyof typeof SETS;
+import {
+  type Enabled,
+  type SetKey,
+  entropyBits,
+  poolFrom,
+  secureGenerate,
+  strengthLabel,
+} from "@/lib/password";
 
 const TOGGLES: { key: SetKey; label: string }[] = [
   { key: "lower", label: "小写 a-z" },
@@ -17,38 +16,6 @@ const TOGGLES: { key: SetKey; label: string }[] = [
   { key: "digits", label: "数字 0-9" },
   { key: "symbols", label: "符号 !@#" },
 ];
-
-type Enabled = Record<SetKey, boolean>;
-
-function poolFrom(enabled: Enabled): string {
-  return (Object.keys(SETS) as SetKey[])
-    .filter((k) => enabled[k])
-    .map((k) => SETS[k])
-    .join("");
-}
-
-/** Cryptographically-secure pick without modulo bias (rejection sampling). */
-function secureGenerate(length: number, pool: string): string {
-  if (pool.length === 0) return "";
-  const out: string[] = [];
-  const max = 256 - (256 % pool.length);
-  const buf = new Uint8Array(length * 2);
-  while (out.length < length) {
-    crypto.getRandomValues(buf);
-    for (let i = 0; i < buf.length && out.length < length; i++) {
-      if (buf[i] < max) out.push(pool[buf[i] % pool.length]);
-    }
-  }
-  return out.join("");
-}
-
-function strengthLabel(bits: number): { text: string; color: string; pct: number } {
-  const pct = Math.min(100, (bits / 128) * 100);
-  if (bits < 40) return { text: "WEAK", color: "#ffb000", pct };
-  if (bits < 70) return { text: "FAIR", color: "#ffb000", pct };
-  if (bits < 110) return { text: "STRONG", color: "#00ff41", pct };
-  return { text: "FORTRESS", color: "#00ff41", pct };
-}
 
 export default function PasswordGen() {
   const [length, setLength] = useState(20);
@@ -70,7 +37,7 @@ export default function PasswordGen() {
   }, []);
 
   const pool = poolFrom(enabled);
-  const entropy = pool.length > 0 ? Math.round(length * Math.log2(pool.length)) : 0;
+  const entropy = entropyBits(length, pool.length);
   const strength = strengthLabel(entropy);
 
   function regenerate(len = length, en = enabled) {

@@ -40,6 +40,7 @@ export default function FlappyBirdPage() {
   const startedRef = useRef(false);
   const gameOverRef = useRef(false);
   const scoreRef = useRef(0);
+  const loopRef = useRef<() => void>(() => {});
 
   const resetGame = useCallback(() => {
     birdY.current = H / 2;
@@ -134,9 +135,7 @@ export default function FlappyBirdPage() {
     birdV.current += GRAVITY;
     birdY.current += birdV.current;
 
-    for (const p of pipes.current) {
-      p.x -= PIPE_SPEED;
-    }
+    pipes.current = pipes.current.map((p) => ({ ...p, x: p.x - PIPE_SPEED }));
 
     if (pipes.current.length === 0 || pipes.current[pipes.current.length - 1].x < W - 200) {
       pipes.current.push({ x: W, gapY: randomGapY(), scored: false });
@@ -163,21 +162,34 @@ export default function FlappyBirdPage() {
       ) {
         gameOverRef.current = true;
         setGameOver(true);
-        setHighScore((p) => Math.max(p, scoreRef.current));
+        setHighScore((hs) => Math.max(hs, scoreRef.current));
         draw();
         return;
       }
+    }
 
+    let gained = 0;
+    pipes.current = pipes.current.map((p) => {
       if (!p.scored && p.x + PIPE_W < BIRD_X) {
-        p.scored = true;
-        scoreRef.current += 1;
-        setScore(scoreRef.current);
+        gained += 1;
+        return { ...p, scored: true };
       }
+      return p;
+    });
+    if (gained > 0) {
+      scoreRef.current += gained;
+      setScore(scoreRef.current);
     }
 
     draw();
-    frameId.current = requestAnimationFrame(gameLoop);
+    frameId.current = requestAnimationFrame(() => loopRef.current());
   }, [draw]);
+
+  // Keep loopRef pointing at the latest gameLoop so its self-scheduling above
+  // does not reference gameLoop before declaration.
+  useEffect(() => {
+    loopRef.current = gameLoop;
+  }, [gameLoop]);
 
   const flap = useCallback(() => {
     if (gameOverRef.current) return;
@@ -192,7 +204,14 @@ export default function FlappyBirdPage() {
   }, [gameLoop]);
 
   useEffect(() => {
-    resetGame();
+    // Initialise refs on mount WITHOUT setState — initial React state already
+    // matches (started/gameOver=false, score=0), so this avoids set-state-in-effect.
+    birdY.current = H / 2;
+    birdV.current = 0;
+    pipes.current = [{ x: W + 40, gapY: randomGapY(), scored: false }];
+    scoreRef.current = 0;
+    gameOverRef.current = false;
+    startedRef.current = false;
 
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Enter" && gameOverRef.current) {

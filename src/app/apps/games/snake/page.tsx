@@ -27,7 +27,6 @@ export default function SnakePage() {
   const [snake, setSnake] = useState<Pos[]>(initialSnake);
   const [food, setFood] = useState<Pos>(initFood);
   const [dir, setDir] = useState<Dir>("RIGHT");
-  const [nextDir, setNextDir] = useState<Dir>("RIGHT");
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
@@ -40,7 +39,6 @@ export default function SnakePage() {
     setSnake(s);
     setFood(f);
     setDir("RIGHT");
-    setNextDir("RIGHT");
     setScore(0);
     setGameOver(false);
     setStarted(false);
@@ -109,7 +107,6 @@ export default function SnakePage() {
       const opp: Record<Dir, Dir> = { UP: "DOWN", DOWN: "UP", LEFT: "RIGHT", RIGHT: "LEFT" };
       if (nd === opp[dir]) return;
 
-      setNextDir(nd);
       setDir(nd);
       gameRef.current.dir = nd;
     };
