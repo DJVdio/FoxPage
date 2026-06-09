@@ -151,3 +151,29 @@ body::after {
   height: 1px;
   background: linear-gradient(to right, transparent, var(--pip-boy-green-dark), var(--pip-boy-green-dim), var(--pip-boy-green-dark), transparent);
 }
+
+/* ===== Phosphor skins =====
+   Applied as a global hue/saturation shift on <html> so that even the many
+   hardcoded green hex values reskin together. green = default (no filter). */
+html[data-phosphor="amber"] {
+  filter: hue-rotate(-94deg) saturate(1.05);
+}
+html[data-phosphor="blue"] {
+  filter: hue-rotate(64deg);
+}
+html[data-phosphor="white"] {
+  filter: saturate(0) brightness(1.25);
+}
+
+/* ===== Settings toggles ===== */
+html[data-scanline="off"] .pip-scanline,
+html[data-scanline="off"] body::before {
+  display: none;
+}
+
+html[data-motion="off"] *,
+html[data-motion="off"] *::before,
+html[data-motion="off"] *::after {
+  animation: none !important;
+  transition-duration: 0.01ms !important;
+}

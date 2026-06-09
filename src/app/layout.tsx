@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import AppShell from "./app-shell";
@@ -7,6 +7,11 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "FOXPAGE · Pip-Boy 3000",
   description: "Vault-Tec™ App Market — browse and launch web apps",
+  appleWebApp: { capable: true, title: "FoxPage", statusBarStyle: "black-translucent" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0a0f0a",
 };
 
 export default function RootLayout({
@@ -20,7 +25,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{if(sessionStorage.getItem('foxpage_booted')){document.documentElement.classList.add('foxpage-booted')}}catch(e){}",
+              "try{var d=document.documentElement;if(sessionStorage.getItem('foxpage_booted')){d.classList.add('foxpage-booted')}var g=function(k){try{var v=localStorage.getItem('foxpage:'+k);return v?JSON.parse(v):null}catch(e){return null}};var p=g('phosphor');if(p&&p!=='green')d.setAttribute('data-phosphor',p);if(g('scanline')===false)d.setAttribute('data-scanline','off');if(g('motion')===false)d.setAttribute('data-motion','off')}catch(e){}",
           }}
         />
       </head>

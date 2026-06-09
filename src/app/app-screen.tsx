@@ -1,11 +1,21 @@
 import Link from "next/link";
-import PipHeader from "@/app/pip-header";
-import AppCard from "@/app/app-card";
-import { findApp } from "@/data/apps";
+import PipHeader from "./pip-header";
 
-const miniGames = findApp("games")?.children ?? [];
-
-export default function GamesPage() {
+/**
+ * Shared chrome for a sub-app screen: header + RETURN nav + titled section + footer.
+ * Server Component — render interactive parts as client children inside it.
+ */
+export default function AppScreen({
+  title,
+  children,
+  footer = "VAULT-TEC™",
+  backHref = "/",
+}: {
+  title: string;
+  children: React.ReactNode;
+  footer?: string;
+  backHref?: string;
+}) {
   return (
     <>
       <PipHeader />
@@ -13,7 +23,7 @@ export default function GamesPage() {
         <div className="mx-auto w-full max-w-3xl flex-1">
           <nav className="mb-6">
             <Link
-              href="/"
+              href={backHref}
               prefetch={true}
               className="inline-flex items-center gap-1 text-xs tracking-[0.1em] text-[#00aa2a] transition-colors hover:text-[#00ff41]"
             >
@@ -24,21 +34,15 @@ export default function GamesPage() {
 
           <div className="mb-6 flex items-center gap-2 text-xs tracking-[0.2em] text-[#00aa2a]">
             <span className="h-px flex-1 bg-gradient-to-r from-[#00ff41]/20 to-transparent" />
-            <span>GAMES.LIBRARY</span>
+            <span>{title}</span>
             <span className="h-px flex-1 bg-gradient-to-l from-[#00ff41]/20 to-transparent" />
           </div>
 
-          <div className="space-y-3">
-            {miniGames.map((game, i) => (
-              <AppCard key={game.id} app={game} index={i} />
-            ))}
-          </div>
+          {children}
         </div>
 
         <footer className="mt-6 border-t border-[#003a0f] pt-3 text-center">
-          <p className="text-[10px] tracking-[0.15em] text-[#00aa2a]/40">
-            VAULT-TEC™ · SELECT A GAME TO PLAY
-          </p>
+          <p className="text-[10px] tracking-[0.15em] text-[#00aa2a]/40">{footer}</p>
         </footer>
       </div>
     </>
